@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HabitForge — Build Better Habits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">HabitForge</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-view="dashboard">
+        <span class="nav-icon">◈</span> Dashboard
+      </button>
+      <button class="nav-btn" data-view="habits">
+        <span class="nav-icon">◉</span> My Habits
+      </button>
+      <button class="nav-btn" data-view="calendar">
+        <span class="nav-icon">▦</span> Calendar
+      </button>
+      <button class="nav-btn" data-view="stats">
+        <span class="nav-icon">◭</span> Stats
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+        <span class="theme-icon">◑</span>
+        <span>Toggle Theme</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========== MOBILE HEADER ========== -->
+  <header class="mobile-header">
+    <button class="hamburger" id="hamburger">☰</button>
+    <span class="mobile-logo">⬡ HabitForge</span>
+    <button class="theme-toggle-mobile" id="themeToggleMobile">◑</button>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main-content">
+
+    <!-- QUOTE BANNER -->
+    <div class="quote-banner" id="quoteBanner">
+      <span class="quote-icon">✦</span>
+      <span id="quoteText"></span>
+      <button class="quote-refresh" id="refreshQuote" title="New quote">↻</button>
+    </div>
+
+    <!-- ===== DASHBOARD VIEW ===== -->
+    <section class="view active" id="view-dashboard">
+      <div class="view-header">
+        <div>
+          <h1 class="view-title">Dashboard</h1>
+          <p class="view-subtitle" id="dateDisplay"></p>
+        </div>
+        <button class="btn-primary" id="openAddModal">+ Add Habit</button>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-grid">
+        <div class="stat-card" id="stat-total">
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-label">Total Habits</div>
+          <div class="stat-glyph">◈</div>
+        </div>
+        <div class="stat-card accent" id="stat-done">
+          <div class="stat-value" id="statDone">0</div>
+          <div class="stat-label">Done Today</div>
+          <div class="stat-glyph">◉</div>
+        </div>
+        <div class="stat-card" id="stat-streak">
+          <div class="stat-value" id="statStreak">0</div>
+          <div class="stat-label">Best Streak</div>
+          <div class="stat-glyph">▲</div>
+        </div>
+        <div class="stat-card" id="stat-pct">
+          <div class="stat-value" id="statPct">0%</div>
+          <div class="stat-label">Today's Rate</div>
+          <div class="stat-glyph">◭</div>
+        </div>
+      </div>
+
+      <!-- Daily Progress Bar -->
+      <div class="daily-progress-wrap">
+        <div class="daily-progress-header">
+          <span>Today's Progress</span>
+          <span id="dailyProgressLabel">0 / 0 habits</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="dailyProgressBar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Today's Habits -->
+      <div class="section-header">
+        <h2 class="section-title">Today's Habits</h2>
+        <span class="section-badge" id="pendingBadge">0 pending</span>
+      </div>
+      <div class="habits-grid" id="todayHabitsGrid">
+        <div class="empty-state" id="emptyDashboard">
+          <div class="empty-icon">◎</div>
+          <p>No habits yet. Add your first one!</p>
+          <button class="btn-primary" onclick="document.getElementById('openAddModal').click()">Add Habit</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HABITS VIEW ===== -->
+    <section class="view" id="view-habits">
+      <div class="view-header">
+        <div>
+          <h1 class="view-title">My Habits</h1>
+          <p class="view-subtitle">Manage all your habits</p>
+        </div>
+        <button class="btn-primary" onclick="document.getElementById('openAddModal').click()">+ Add Habit</button>
+      </div>
+
+      <div class="habits-list" id="allHabitsList">
+        <div class="empty-state">
+          <div class="empty-icon">◎</div>
+          <p>No habits yet. Start building!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CALENDAR VIEW ===== -->
+    <section class="view" id="view-calendar">
+      <div class="view-header">
+        <div>
+          <h1 class="view-title">Calendar</h1>
+          <p class="view-subtitle">Track your history</p>
+        </div>
+        <div class="calendar-nav">
+          <button class="btn-icon" id="prevMonth">‹</button>
+          <span id="calMonthLabel"></span>
+          <button class="btn-icon" id="nextMonth">›</button>
+        </div>
+      </div>
+
+      <div class="calendar-habit-filter" id="calendarHabitFilter"></div>
+      <div class="calendar-grid-wrap">
+        <div class="calendar-weekdays">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+          <span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+        <div class="calendar-days" id="calendarDays"></div>
+      </div>
+    </section>
+
+    <!-- ===== STATS VIEW ===== -->
+    <section class="view" id="view-stats">
+      <div class="view-header">
+        <div>
+          <h1 class="view-title">Statistics</h1>
+          <p class="view-subtitle">Your habit analytics</p>
+        </div>
+      </div>
+
+      <div class="stats-detail-grid" id="statsDetailGrid"></div>
+
+      <div class="weekly-wrap">
+        <h2 class="section-title">Weekly Overview</h2>
+        <div class="weekly-chart" id="weeklyChart"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== ADD/EDIT MODAL ========== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="habitModal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add New Habit</h2>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Habit Name</label>
+          <input type="text" id="habitName" placeholder="e.g. Morning Run, Read 20 Pages…" maxlength="40" />
+        </div>
+        <div class="form-group">
+          <label>Pick an Icon</label>
+          <div class="icon-grid" id="iconGrid"></div>
+        </div>
+        <div class="form-group">
+          <label>Category Color</label>
+          <div class="color-grid" id="colorGrid"></div>
+        </div>
+        <div class="form-group">
+          <label>Reminder Time <span class="optional">(optional)</span></label>
+          <input type="time" id="habitReminder" />
+        </div>
+        <div class="form-group">
+          <label>Notes <span class="optional">(optional)</span></label>
+          <textarea id="habitNotes" placeholder="Why does this habit matter to you?" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelModal">Cancel</button>
+        <button class="btn-primary" id="saveHabit">Save Habit</button>
+      </div>
+      <input type="hidden" id="editingId" value="" />
+    </div>
+  </div>
+
+  <!-- ========== NOTIFICATION TOAST ========== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ========== CONFETTI CANVAS ========== -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
